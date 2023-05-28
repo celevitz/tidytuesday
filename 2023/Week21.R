@@ -25,7 +25,7 @@ sq <- squirrel_data %>%
   mutate(percent=n/N,fulllabel=paste0(round(percent,3)*100,"%\nn=",n)) %>%
   # Compute the position of labels
   arrange(fulllabel) %>%
-  mutate(prop = n / sum(n) *100) %>%
+  mutate(prop = percent / sum(percent) *100) %>%
   mutate(ypos = cumsum(prop)- 0.5*prop )
 
 ## Plot the figure
@@ -38,6 +38,8 @@ sq <- squirrel_data %>%
     scale_fill_manual(values=c("gray75","cyan4")) +
     theme_void() +
     theme(legend.position="none")
+
+
 
 
 
