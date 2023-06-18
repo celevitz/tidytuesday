@@ -1,6 +1,7 @@
 # 2023-06-18
 # Carly Levitz
-# Tidy Tuesday:
+# Tidy Tuesday: UFO sightings
+# My goal this week: incorporate icons or pictures.
 
 # Set up, bring in the data
 
@@ -20,11 +21,12 @@ sightings0 <- tidytuesdayR::tt_load(2023, week = 25)$ufo_sightings %>%
   filter(country_code %in% c("AU","CA","GB","IN","MX","NZ","US","ZA"))
 
 # clean the data: there are some with day-part missing
-  table(sightings0$reported_date_time[is.na(sightings0$day_part)])
+  #table(sightings0$reported_date_time[is.na(sightings0$day_part)])
   # there are too many of these to research. So I'm going to put them as
   #     'not reported'
 
   sightings0$day_part[is.na(sightings0$day_part)] <- "unknown"
+  sightings0$day_part[sightings0$day_part == "NA"] <- "unknown"
 
 # analyze the data
 sightings <- sightings0 %>%
@@ -35,11 +37,16 @@ sightings <- sightings0 %>%
   ungroup() %>% group_by(country_code,year) %>%
   mutate(total = sum(count)) %>%
   mutate(percent = count/total) %>%
-  filter(!(is.na(day_part)))
+  filter(!(is.na(day_part))) %>%
+  mutate(day_part = factor(day_part,
+                           levels = c("astronomical dawn","nautical dawn"
+                                      ,"civil dawn","morning,","afternoon"
+                                      ,"night","civil dusk","nautical dusk"
+                                      ,"astronomical dusk","unknown")))
 
 ##
 sightings %>%
-  ggplot(aes(x=year,y=percent,color=day_part)) +
+  ggplot(aes(x=year,y=percent,color=day_part,size=count)) +
   geom_point() +
   facet_wrap(~country_code)
 
