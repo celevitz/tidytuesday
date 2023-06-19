@@ -115,7 +115,7 @@ graph1 <- usSightings %>%
 graph2data <- usSightings %>%
   group_by(year) %>%
   summarise(total = sum(total)) %>%
-  mutate(labelstartstop = case_when(year %in% c("1960","2014", "2023") ~paste0("n=",total)
+  mutate(labelstartstop = case_when(year %in% c("1960","2014", "2023") ~paste0(total," in ",year)
                                            ,TRUE ~ NA)
     ,image = paste(savedirectory,"TidyTuesday2023Week25flying-saucer_1f6f8.png",sep=""))
 
